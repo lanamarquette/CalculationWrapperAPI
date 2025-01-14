@@ -10,7 +10,7 @@
 #endif
 
 extern "C" {
-    DLL_API DataFrame CalculateValues(double dPremium, double dFace, double dInterestRate, int iAge, string sWhichCompany);
+    DLL_API int Calculate(double dPremium, double dFace, double dInterestRate, int iAge, const char *cWhichCompany);
     //DLL_API int multiply(int a, int b);
 }
 

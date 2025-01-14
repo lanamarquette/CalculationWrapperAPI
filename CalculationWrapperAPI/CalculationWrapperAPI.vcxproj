@@ -130,9 +130,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CalculationWrapperAPI.cpp" />
+    <ClCompile Include="DllManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\IllustrationCalculation\IllustrationCalculation\IllustrationCalculation.h" />
+    <ClInclude Include="DllManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

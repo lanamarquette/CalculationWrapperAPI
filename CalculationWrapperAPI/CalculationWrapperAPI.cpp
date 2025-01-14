@@ -6,6 +6,8 @@
 #include <windows.h>
 #include <sstream>
 #include "IllustrationCalculation.h"
+#include "DllManager.h"
+
 using namespace std; 
 
 typedef int (*CalculateOperation)(double, double, double, int, string);
@@ -13,7 +15,7 @@ typedef int (*CalculateOperation)(double, double, double, int, string);
 HMODULE loadDll() {
 
     // "C:\Users\lanam\source\repos\IllustrationCalculation\x64\Debug\IllustrationCalculation.lib"
-    LPCWSTR fpath = L"C:\\Users\\lanam\\source\\repos\\IllustrationCalculation\\x64\\Debug\\IllustrationCalculation.lib";
+    LPCWSTR fpath = L"C:\\Users\\lanam\\source\\repos\\IllustrationCalculation\\x64\\Debug\\IllustrationCalculation.dll";
     HMODULE hDll = LoadLibrary(fpath);
     if (!hDll) {
         std::cerr << "Failed to load DLL\n";
@@ -27,8 +29,8 @@ void unloadDll(HMODULE hDll) {
 }
 
 CalculateOperation getFunction(HMODULE hDll, const std::string& operation) {
-    if (operation == "add") {
-        return (CalculateOperation)GetProcAddress(hDll, "add");
+    if (operation == "Calculate") {
+        return (CalculateOperation)GetProcAddress(hDll, "Calculate");
     }
     else if (operation == "multiply") {
         return (CalculateOperation)GetProcAddress(hDll, "multiply");
@@ -41,37 +43,45 @@ CalculateOperation getFunction(HMODULE hDll, const std::string& operation) {
 
 int main()
 {
+    DllManager dllManager;
     
-    HMODULE hDll = loadDll();
 
-    std::string input;
+    // Load the DLL
+    if (!dllManager.Load(L"MyLibrary.dll")) {
+        return -1; // Exit if DLL cannot be loaded
+
+    string input;
     while (true) {
-        std::cout << "Enter command (operation num1 num2) or 'exit': ";
-        std::getline(std::cin, input);
+        cout << "Enter command (operation num1 num2) or 'exit': ";
+        getline(cin, input);
 
         if (input == "exit") {
             break;
         }
 
-        std::istringstream iss(input);
-        std::string operation;
-        int num1, num2;
-        if (!(iss >> operation >> num1 >> num2)) {
-            std::cerr << "Invalid input format.\n";
+        //int Calculate(double dPremium, double dFace, double dInterestRate, int iAge, const char* cWhichCompany)
+        istringstream iss(input);
+        string operation;
+        int iAge;
+        double dPremium, dFace, dInterestRate;
+        char cWhichCompany[50]{};
+
+        if (!(iss >> operation >> dPremium >> dFace >> dInterestRate >> iAge >> cWhichCompany)) {
+            cerr << "Invalid input format.\n";
             continue;
         }
 
-        CalculateOperation func = getFunction(hDll, operation);
+        CalculateOperation func = dllManager.GetFunction<CalculateOperation>(operation);
         if (!func) {
-            std::cerr << "Invalid operation.\n";
+            cerr << "Invalid operation.\n";
             continue;
         }
 
-        int result = func(num1, num2);
-        std::cout << "Result: " << result << "\n";
+        int result = func(dPremium, dFace, dInterestRate, iAge, cWhichCompany);
+        cout << "Result: " << result << "\n";
     }
 
-    unloadDll(hDll);
+    
     return 0;
 
 }

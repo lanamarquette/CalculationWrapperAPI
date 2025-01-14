@@ -18,9 +18,15 @@
     <ClCompile Include="CalculationWrapperAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DllManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\IllustrationCalculation\IllustrationCalculation\IllustrationCalculation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DllManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
